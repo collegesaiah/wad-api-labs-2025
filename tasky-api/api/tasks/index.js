@@ -21,8 +21,6 @@ router.get('/:id', (req, res) => {
 
 //Add a task
 router.post('/', (req, res) => {
-      console.log('POST /api/tasks hit');
-      console.log(req.body);
       const { title, description, deadline, priority, done } = req.body;
       const newTask = {
           id: uuidv4(),
@@ -33,9 +31,33 @@ router.post('/', (req, res) => {
           done
       };
       tasksData.tasks.push(newTask);
-      console.log('Tasks now:', tasksData.tasks);
       res.status(201).json(newTask);
       tasksData.total_results++;
   });
+
+  //Update an existing task
+router.put('/:id', (req, res) => {
+      const { id } = req.params;
+      const taskIndex = tasksData.tasks.findIndex(task => task.id === id); 
+      if (taskIndex === -1) {
+          return res.status(404).json({ status: 404, message: 'Task not found' });
+      }
+      const updatedTask = { ...tasksData.tasks[taskIndex], ...req.body, id:id };
+      tasksData.tasks[taskIndex] = updatedTask;
+      res.json(updatedTask);
+  });
+  
+  //Delete a task
+router.delete('/:id', (req, res) => {
+      const { id } = req.params;
+      const taskIndex = tasksData.tasks.findIndex(task => task.id === id);
+      
+      if (taskIndex === -1) return res.status(404).json({status:404,message:'Task not found'});
+      
+      tasksData.tasks.splice(taskIndex, 1);
+      res.status(204).send();
+      tasksData.total_results--;
+  });
+  
   
   export default router;
