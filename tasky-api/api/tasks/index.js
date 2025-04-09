@@ -1,5 +1,6 @@
 import express from 'express';
 import { tasksData } from './tasksData';
+import { v4 as uuidv4 } from 'uuid';
 
 const router = express.Router(); 
 
@@ -18,4 +19,23 @@ router.get('/:id', (req, res) => {
   });
   
 
-export default router;
+//Add a task
+router.post('/', (req, res) => {
+      console.log('POST /api/tasks hit');
+      console.log(req.body);
+      const { title, description, deadline, priority, done } = req.body;
+      const newTask = {
+          id: uuidv4(),
+          title,
+          description,
+          deadline,
+          priority,
+          done
+      };
+      tasksData.tasks.push(newTask);
+      console.log('Tasks now:', tasksData.tasks);
+      res.status(201).json(newTask);
+      tasksData.total_results++;
+  });
+  
+  export default router;
