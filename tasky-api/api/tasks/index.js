@@ -10,7 +10,6 @@ router.get('/', async (req, res) => {
     res.status(200).json(tasks);
 });
 
-
 // create a task
 router.post('/', asyncHandler(async (req, res) => {
     console.log('Received POST /api/tasks with body:', req.body);

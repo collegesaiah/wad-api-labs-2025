@@ -36,10 +36,10 @@ router.post('/', asyncHandler(async (req, res) => {
       if (!passwordReq.test(password)) {
             return res.status(400).json({
             success: false,
-            msg: 'Password must be at least 8 characters long and include one letter, one number, and one special character.'
+            msg: 'Password must be at least 8 and include one letter, one number, and one special character.'
             });
       }
-      
+
       await User.create(req.body);
       res.status(201).json({ success: true, msg: 'User successfully created.' });
   }
